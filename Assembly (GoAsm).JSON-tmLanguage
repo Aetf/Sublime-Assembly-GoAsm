@@ -1,0 +1,13 @@
+// [PackageDev] target_format: plist, ext: tmLanguage
+{
+	"name": "Assembly (GoASM)",
+	"scopeName": "source.asm",
+	"fileTypes": [
+		"asm", "ASM", "inc", "INC"
+	],
+	"uuid": "76d94322-7c7b-4ae0-8abf-09183b340bc7",
+
+	"patterns": [
+
+	]
+}

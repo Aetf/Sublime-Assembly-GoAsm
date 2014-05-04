@@ -1,0 +1,4 @@
+*.cache
+*.sublime-settings
+*.sublime-project
+*.sublime-workspace
