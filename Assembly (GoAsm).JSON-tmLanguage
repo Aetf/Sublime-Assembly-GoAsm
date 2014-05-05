@@ -36,7 +36,7 @@
             "name": "constant.numeric.hex",
             "comment": "Hexadecimal numbers format: FFh",
 
-            "match": "\\b([0-9][0-9a-fA-F]+(h|H))\\b",
+            "match": "\\b([0-9][0-9a-fA-F]*(h|H))\\b",
             "captures": {
                 "1": {
                     "name": "constant.numeric.hex"
@@ -112,10 +112,11 @@
 
 
         // Labels
+        /*
         {
             "name": "entity.name.tag.reusable.scoped",
 
-            "match": "(\\.\\w+[:])"
+            "match": "(\\.\\w+[:]?)"
         },
         {
             "name": "entity.name.tag.reusable.unscoped",
@@ -125,9 +126,15 @@
         {
             "name": "entity.name.tag.unique",
             
-            "match": "([a-zA-Z_]+[:])"
-        },
+            "match": "^\\s*([a-zA-Z_]+[:]?)",
 
+            "captures": {
+                "1": {
+                    "name": "entity.name.tag.unique"
+                }
+            }
+        },
+        */
 
         // Operators
         {
@@ -138,18 +145,19 @@
         {
         	"name": "keyword.operator",
 
-        	"match": "+|-|\\*|/|\\(|\\)|&|\\||!|<<|>>|~"
+        	"match": "\\+|-|\\*|/|\\(|\\)|&|\\||!|<<|>>|~"
         },
         {
             "name": "markup.italic.address-deref",
             "comment": "Assembly address dereference",
 
-            "match": "\\[(.+)\\]",
-            "captures": {
-                "1": {
-                    "name": "markup.italic.address-deref"
-                }
-            }
+            "begin": "\\[",
+
+            "end": "\\]",
+
+            "patterns": [
+                {"include": "$self"}
+            ]
         },
 
 
@@ -191,7 +199,11 @@
         		"1": {"name": "entity.name.struct"}
         	},
 
-        	"end": "\\b(?i:ENDS)\\b"
+        	"end": "\\b(?i:ENDS)\\b",
+
+            "patterns": [
+                { "include": "$self" }
+            ]
         },
         // - union declaration
         {
@@ -202,7 +214,11 @@
         		"1": {"name": "entity.name.union"}
         	},
 
-        	"end": "\\b(?i:ENDS|ENDUNION)\\b"
+        	"end": "\\b(?i:ENDS|ENDUNION)\\b",
+
+            "patterns": [
+                { "include": "$self" }
+            ]
         },
         // - modifiers
         {
@@ -213,18 +229,18 @@
         {
         	"name": "keyword.other.modifier.direction_indicator",
 
-        	"match": "\\b(?i:<|>|<<|>>)\\b"
+        	"match": "\\b(<|>|<<|>>)\\b"
         },
         {
         	"name": "keyword.other.modifier.type_indicator",
 
-        	"match": "\\b(?i:B|W|D|Q|T|S|P)(?<=\\[)"
+        	"match": "\\b(B|W|D|Q|T|S|P)(?=\\[)"
         },
         // - macros, equate, etc.
         {
         	"name": "keyword.other.directive.definition",
 
-        	"match": "\\b(?i:EQU|=)\\b"
+        	"match": "(?i:EQU|=)"
         },
         {
         	"name": "entity.other.macro",
@@ -234,13 +250,17 @@
         		"1": {"name": "entity.name.macro"}
         	},
 
-        	"end": "\\b(?i:ENDM)\\b"
+        	"end": "\\b(?i:ENDM)\\b",
+
+            "patterns": [
+                { "include": "$self" }
+            ]
         },
         // - preprocessor directives
         {
         	"name": "keyword.other.preprocessor",
 
-        	"match": "\\b(?i:^#(define|if|elif|else|endif|ifdef|ifndef|include))\\b"
+        	"match": "^#(?i:define|if|elif|else|endif|ifdef|ifndef|include)\\b"
         },
         // - others
         {
@@ -435,7 +455,17 @@
                     "name": "support.class.80186/80188"
                 }
             }
-        }, 
+        },
+        {
+            "name": "support.class.8086/8088", 
+            "comment": "Function 8086/8088 case insensitive", 
+            "match": "^\\s*(?i:aaa|aad|aam|aas|adc|add|and|call|cbw|clc|cld|cli|cmc|cmp|cmpsb|cmpsw|cwd|daa|das|dec|div|esc|hlt|idiv|imul|in|inc|int|into|iret|ja|jae|jb|jbe|jc|jcxz|je|jg|jge|jl|jle|jna|jnae|jnb|jnbe|jnc|jne|jng|jnge|jnl|jnle|jno|jnp|jns|jnz|jo|jp|jpe|jpo|js|jz|jmp|lahf|lar|lds|lea|les|lock|lodsb|lodsw|loop|loope|loopz|loopnz|loopne|mov|movsb|movsw|mul|neg|nop|not|or|out|pop|popf|push|pushf|rcl|rcr|rep|repe|repne|repnz|repz|ret|retn|retf|rol|ror|sahf|sal|sar|sbb|scasb|scasw|shl|shr|stc|std|sti|stosb|stosw|sub|test|wait|xchg|xlat|xor)\\s", 
+            "captures": {
+                "1": {
+                    "name": "support.class.8086/8088"
+                }
+            }
+        },
         {
             "match": "^\\s*(?i:f2xm1|fabs|fadd|faddp|fbld|fbstp|fchs|fclex|fcom|fcomp|fcompp|fdecstp|fdisi|fdiv|fdivp|fdivr|fdivrp|feni|ffree|fiadd|ficom|ficomp|fidiv|fidivr|fild|fimul|fincstp|finit|fist|fistp|fisub|fisubr|fld|fld1|fldcw|fldenv|fldenvw|fldl2e|fldl2t|fldlg2|fldln2|fldpi|fldz|fmul|fmulp|fnclex|fndisi|fneni|fninit|fnop|fnsave|fnsavew|fnstcw|fnstenv|fnstenvw|fnstsw|fpatan|fprem|fptan|frndint|frstor|frstorw|fsave|fsavew|fscale|fsqrt|fst|fstcw|fstenv|fstenvw|fstp|fstsw|fsub|fsubp|fsubr|fsubrp|ftst|fwait|fxam|fxch|fxtract|fyl2x|fyl2xp1|fsetpm|fcos|fldenvd|fnsaved|fnstenvd|fprem1|frstord|fsaved|fsin|fsincos|fstenvd|fucom|fucomp|fucompp|fcomi|fcomip|fucomi|fucomip|ffreep|fcmovb|fcmove|fcmovbe|fcmovu|fcmovnb|fcmovne|fcmovnbe|fcmovnu)\\s", 
             "name": "support.class.fpu", 

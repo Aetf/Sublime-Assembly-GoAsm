@@ -55,7 +55,7 @@
 			<key>comment</key>
 			<string>Hexadecimal numbers format: FFh</string>
 			<key>match</key>
-			<string>\b([0-9][0-9a-fA-F]+(h|H))\b</string>
+			<string>\b([0-9][0-9a-fA-F]*(h|H))\b</string>
 			<key>name</key>
 			<string>constant.numeric.hex</string>
 		</dict>
@@ -157,49 +157,32 @@
 		</dict>
 		<dict>
 			<key>match</key>
-			<string>(\.\w+[:])</string>
-			<key>name</key>
-			<string>entity.name.tag.reusable.scoped</string>
-		</dict>
-		<dict>
-			<key>match</key>
-			<string>([a-zA-Z]?\d+:)</string>
-			<key>name</key>
-			<string>entity.name.tag.reusable.unscoped</string>
-		</dict>
-		<dict>
-			<key>match</key>
-			<string>([a-zA-Z_]+[:])</string>
-			<key>name</key>
-			<string>entity.name.tag.unique</string>
-		</dict>
-		<dict>
-			<key>match</key>
 			<string>\b(?i:ADDR|OFFSET|SIZEOF|OR|AND|NOT)\b</string>
 			<key>name</key>
 			<string>keyword.operator</string>
 		</dict>
 		<dict>
 			<key>match</key>
-			<string>+|-|\*|/|\(|\)|&amp;|\||!|&lt;&lt;|&gt;&gt;|~</string>
+			<string>\+|-|\*|/|\(|\)|&amp;|\||!|&lt;&lt;|&gt;&gt;|~</string>
 			<key>name</key>
 			<string>keyword.operator</string>
 		</dict>
 		<dict>
-			<key>captures</key>
-			<dict>
-				<key>1</key>
-				<dict>
-					<key>name</key>
-					<string>markup.italic.address-deref</string>
-				</dict>
-			</dict>
+			<key>begin</key>
+			<string>\[</string>
 			<key>comment</key>
 			<string>Assembly address dereference</string>
-			<key>match</key>
-			<string>\[(.+)\]</string>
+			<key>end</key>
+			<string>\]</string>
 			<key>name</key>
 			<string>markup.italic.address-deref</string>
+			<key>patterns</key>
+			<array>
+				<dict>
+					<key>include</key>
+					<string>$self</string>
+				</dict>
+			</array>
 		</dict>
 		<dict>
 			<key>match</key>
@@ -250,6 +233,13 @@
 			<string>\b(?i:ENDS)\b</string>
 			<key>name</key>
 			<string>entity.other.struct</string>
+			<key>patterns</key>
+			<array>
+				<dict>
+					<key>include</key>
+					<string>$self</string>
+				</dict>
+			</array>
 		</dict>
 		<dict>
 			<key>begin</key>
@@ -266,6 +256,13 @@
 			<string>\b(?i:ENDS|ENDUNION)\b</string>
 			<key>name</key>
 			<string>entity.other.union</string>
+			<key>patterns</key>
+			<array>
+				<dict>
+					<key>include</key>
+					<string>$self</string>
+				</dict>
+			</array>
 		</dict>
 		<dict>
 			<key>match</key>
@@ -275,19 +272,19 @@
 		</dict>
 		<dict>
 			<key>match</key>
-			<string>\b(?i:&lt;|&gt;|&lt;&lt;|&gt;&gt;)\b</string>
+			<string>\b(&lt;|&gt;|&lt;&lt;|&gt;&gt;)\b</string>
 			<key>name</key>
 			<string>keyword.other.modifier.direction_indicator</string>
 		</dict>
 		<dict>
 			<key>match</key>
-			<string>\b(?i:B|W|D|Q|T|S|P)(?&lt;=\[)</string>
+			<string>\b(B|W|D|Q|T|S|P)(?=\[)</string>
 			<key>name</key>
 			<string>keyword.other.modifier.type_indicator</string>
 		</dict>
 		<dict>
 			<key>match</key>
-			<string>\b(?i:EQU|=)\b</string>
+			<string>(?i:EQU|=)</string>
 			<key>name</key>
 			<string>keyword.other.directive.definition</string>
 		</dict>
@@ -306,10 +303,17 @@
 			<string>\b(?i:ENDM)\b</string>
 			<key>name</key>
 			<string>entity.other.macro</string>
+			<key>patterns</key>
+			<array>
+				<dict>
+					<key>include</key>
+					<string>$self</string>
+				</dict>
+			</array>
 		</dict>
 		<dict>
 			<key>match</key>
-			<string>\b(?i:^#(define|if|elif|else|endif|ifdef|ifndef|include))\b</string>
+			<string>^#(?i:define|if|elif|else|endif|ifdef|ifndef|include)\b</string>
 			<key>name</key>
 			<string>keyword.other.preprocessor</string>
 		</dict>
@@ -608,6 +612,22 @@
 			<string>^\s*(?i:bound|enter|ins|leave|outs|popa|pusha)\s</string>
 			<key>name</key>
 			<string>support.class.80186/80188</string>
+		</dict>
+		<dict>
+			<key>captures</key>
+			<dict>
+				<key>1</key>
+				<dict>
+					<key>name</key>
+					<string>support.class.8086/8088</string>
+				</dict>
+			</dict>
+			<key>comment</key>
+			<string>Function 8086/8088 case insensitive</string>
+			<key>match</key>
+			<string>^\s*(?i:aaa|aad|aam|aas|adc|add|and|call|cbw|clc|cld|cli|cmc|cmp|cmpsb|cmpsw|cwd|daa|das|dec|div|esc|hlt|idiv|imul|in|inc|int|into|iret|ja|jae|jb|jbe|jc|jcxz|je|jg|jge|jl|jle|jna|jnae|jnb|jnbe|jnc|jne|jng|jnge|jnl|jnle|jno|jnp|jns|jnz|jo|jp|jpe|jpo|js|jz|jmp|lahf|lar|lds|lea|les|lock|lodsb|lodsw|loop|loope|loopz|loopnz|loopne|mov|movsb|movsw|mul|neg|nop|not|or|out|pop|popf|push|pushf|rcl|rcr|rep|repe|repne|repnz|repz|ret|retn|retf|rol|ror|sahf|sal|sar|sbb|scasb|scasw|shl|shr|stc|std|sti|stosb|stosw|sub|test|wait|xchg|xlat|xor)\s</string>
+			<key>name</key>
+			<string>support.class.8086/8088</string>
 		</dict>
 		<dict>
 			<key>captures</key>
